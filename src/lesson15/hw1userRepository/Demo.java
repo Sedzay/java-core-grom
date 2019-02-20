@@ -45,12 +45,14 @@ public class Demo {
         System.out.println();
 
         //передать юзера для изменения с таким же ид
-        userRepository.update(new User(1002,"Klava","session155"));
+        System.out.println("user is in array: ");
+        System.out.println(userRepository.update(new User(1002,"Klava","session155")));
         System.out.println(Arrays.toString(userRepository.getUsers()));
         System.out.println("--------------------------------------");
 
         //передать несуществующего юзера
-        userRepository.update(new User(9999,"Sweta","session200"));
+        System.out.println("user is not in array: ");
+        System.out.println(userRepository.update(new User(9999,"Sweta","session200")));
         System.out.println(Arrays.toString(userRepository.getUsers()));
         System.out.println("--------------------------------------");
 
