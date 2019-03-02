@@ -1,114 +1,121 @@
 package lesson15.libraryManadger;
 
 import java.util.Arrays;
-import java.util.Date;
 
 public class Demo {
     public static void main(String[] args) {
-        //тест логина админа
-        System.out.println("TEST LOGIN ADMIN****************");
-        System.out.println("incorrect login: ");
-        Admin admin = new Admin(1001);
-        admin.login("Vasya", "admin123");
-        System.out.println(admin.isAuthorization());
-        System.out.println("incorrect password: ");
-        admin = new Admin(1001);
-        admin.login("admin", "123");
-        System.out.println(admin.isAuthorization());
-        System.out.println("correct password: ");
-        admin = new Admin(1001);
-        admin.login("admin", "admin123");
-        System.out.println(admin.isAuthorization());
-        System.out.println("--------------------------------");
-
-        //тест добавления librarian
-        System.out.println("TEST ADD Librarian****************");
-        Book book1 = new Book(10002, "2", "Game of trones", "Georg Mikol", "Zorya", 1, 0, new Date());
-        Book book2 = new Book(10001, "1", "Kolobok", "People", "Zorya", 1, 0, new Date());
-
-        Book[] books = {book1, book2};
-        DataBaseBooks dataBaseBooks = new DataBaseBooks(books);
-        Visitor visitor1 = new Visitor(1,"Petrov");
-        Visitor visitor2 = new Visitor(2, "Ivanov");
-        Visitor[] visitors = {visitor1, visitor2};
-        admin.addLibrarian(101, "Vasiya", "123", "someEmail", "Topol", "Kiev", 123456, dataBaseBooks, visitors,null);
-        admin.addLibrarian(102, "Vasiya", "123", "someEmail", "Topol", "Kiev", 123456, dataBaseBooks, visitors, null);
-        admin.addLibrarian(103, "Vasiya", "123", "someEmail", "Topol", "Kiev", 123456, dataBaseBooks, visitors, null);
-        System.out.println(Arrays.toString(admin.getLibrarians()));
-        System.out.println("--------------------------------");
-
-        System.out.println("if add librarian with same id: ");
-        admin.addLibrarian(103, "Vasiya", "123", "someEmail", "Topol", "Kiev", 123456, dataBaseBooks, visitors, null);
-        System.out.println(Arrays.toString(admin.getLibrarians()));
-        System.out.println("--------------------------------");
-
-        //тест просмотр librarian
-        System.out.println("TEST VIEW Librarian****************");
-        admin.viewLibrarian();
-        System.out.println("--------------------------------");
-
-        //если нет записей
-        System.out.println("if Librarians are not: ");
-        Admin admin1 = new Admin(1002);
-        admin1.viewLibrarian();
-        admin1.login("admin", "admin123");
-        admin1.viewLibrarian();
-        System.out.println("--------------------------------");
-
-        //тест удалить librarian
-        System.out.println("TEST DELETE Librarian****************");
-        admin.deleteLibrarian(102);
-        System.out.println(Arrays.toString(admin.getLibrarians()));
-        System.out.println("--------------------------------");
-
-        //тест logout admin
-        System.out.println("TEST LogOut ADMIN****************");
-        admin.logOut();
-        System.out.println(admin.isAuthorization());
-        System.out.println("--------------------------------");
-
-        //тест добавить книгу в базу данных
-        System.out.println("TEST ADD BOOK in DATABASE BOOKS****************");
-        System.out.println("add other book");
-
-        Book book = new Book(10003, "3", "It", "Posev", "Zorya", 12, 0, new Date());
-        for (Librarian librarian : admin.getLibrarians()) {
-            librarian.login("Vasiya", "123");
+        //тест ввод админа
+        System.out.println("TEST ADD Admin****************");
+        BooksRepository booksRepository = new BooksRepository();
+        booksRepository.addAdmin();
+        //неверный пароль
+        booksRepository.autorisations(UserType.ADMIN, "admin", "dmin123");
+        //неверный логин
+        booksRepository.autorisations(UserType.ADMIN, "dmin", "admin123");
+        //Все верно
+        booksRepository.autorisations(UserType.ADMIN, "admin", "admin123");
+        System.out.println(Arrays.toString(booksRepository.getUsers()));
+        //попытаться завести еще одного админа
+        booksRepository.addAdmin();
+        for (User user : booksRepository.getUsers()) {
+            System.out.println(user.toString());
         }
-        admin.getLibrarians()[0].addBook(book);
-        System.out.println("--------------------------------");
+        booksRepository.autorisations(UserType.LIBRARIAN, "admin", "admin123");
+        System.out.println(Arrays.toString(booksRepository.getUsers()));
 
-        System.out.println("add same book");
-        admin.getLibrarians()[0].addBook(book);
-        admin.getLibrarians()[0].showBooks();
-        admin.getLibrarians()[1].showBooks();
-        System.out.println("--------------------------------");
+        //тест ввод библиотекаря
+        System.out.println("TEST ADD Librarian****************");
+        //вход как библиотекарь
+        booksRepository.addLibrarian("Vasiya", "125", "someEmail", "someAddress", "Kiev", 321);
+        //переавторизация админа
+        booksRepository.autorisations(UserType.ADMIN, "admin", "admin123");
+        System.out.println(Arrays.toString(booksRepository.getUsers()));
+        booksRepository.addLibrarian("Vasiya", "125", "someEmail", "someAddress", "Kiev", 321);
+        booksRepository.showLibrarians();
+        booksRepository.addLibrarian("Bob", "125", "someEmail", "someAddress", "Kiev", 3214);
+        booksRepository.showLibrarians();
 
-        //тест выдать книгу студенту
-        System.out.println("TEST ISSUE BOOK TO Student****************");
-        System.out.println("no problem: ");
-        admin.getLibrarians()[0].issueBook("1", 1,"Petrov", 121212);
-        admin.getLibrarians()[0].showBooks();
-        admin.getLibrarians()[0].showDateBaseGetBooks();
+        //тест удаления библиотекаря
+        System.out.println("TEST Delete Librarian****************");
+        booksRepository.deleteLibrarian(3);
+        booksRepository.showLibrarians();
+        booksRepository.addLibrarian("Bob", "125", "someEmail", "someAddress", "Kiev", 3214);
+        booksRepository.showLibrarians();
 
-        //количество книг не достаточно
-        System.out.println("quantity is not: ");
-        admin.getLibrarians()[0].issueBook("1", 1,"Petrov", 121212);
-        admin.getLibrarians()[0].showBooks();
-        admin.getLibrarians()[0].showDateBaseGetBooks();
+        //тест отключения админа
+        System.out.println("TEST LogOUT Admin****************");
+        booksRepository.logOut();
+        System.out.println(Arrays.toString(booksRepository.getUsers()));
 
+        //тест подключения библиотекаря
+        System.out.println("TEST LogIN Librarian****************");
+        booksRepository.autorisations(UserType.LIBRARIAN, "Bob", "125");
+        for (User user : booksRepository.getUsers()) {
+            System.out.println(user.toString());
+        }
 
-        //тест вернуть книгу в иблиотеку
-        System.out.println("TEST RETURN BOOK TO LIBRARY****************");
-        System.out.println("no book: ");
-        admin.getLibrarians()[0].returnBook("3",1);
-        admin.getLibrarians()[0].showBooks();
-        admin.getLibrarians()[0].showDateBaseGetBooks();
+        //подключение другого библиотекаря
+        System.out.println();
+        booksRepository.autorisations(UserType.LIBRARIAN, "Vasiya", "125");
+        for (User user : booksRepository.getUsers()) {
+            System.out.println(user.toString());
+        }
 
-        System.out.println("no problem: ");
-        admin.getLibrarians()[0].returnBook("1",1);
-        admin.getLibrarians()[0].showBooks();
-        admin.getLibrarians()[0].showDateBaseGetBooks();
+        //тест добавление книги
+        System.out.println("TEST ADD Book****************");
+        booksRepository.addBooks("c199", "game of thrones", "Jordge Mikhol", "Zorya", 12);
+        booksRepository.viewBooks();
+        System.out.println();
+        //добавление такой же книги
+        System.out.println("add equales books");
+        booksRepository.addBooks("c199", "game of thrones", "Jordge Mikhol", "Zorya", 3);
+        booksRepository.viewBooks();
+        System.out.println();
+        //добавление другой книги
+        System.out.println("add another books");
+        booksRepository.addBooks("L200", "Kolobok", "People", "Zorya", 8);
+        booksRepository.viewBooks();
+        System.out.println();
+
+        //тест выдать книгу
+        System.out.println("TEST ISSUED Book****************");
+        booksRepository.issueBook("c199", 3,"Kolya", 1245);
+        System.out.println();
+        //добавит студента визитора
+        booksRepository.autorisations(UserType.ADMIN, "admin", "admin123");
+        booksRepository.addVisitor("Kolya", 1245);
+        booksRepository.addVisitor("John", 999);
+        for (User user : booksRepository.getUsers()) {
+            System.out.println(user.toString());
+        }
+        System.out.println();
+        //выдать книгу
+        booksRepository.autorisations(UserType.LIBRARIAN, "Vasiya", "125");
+        booksRepository.issueBook("c199", 4,"Kolya", 1245);
+        booksRepository.viewBooks();
+        System.out.println();
+        //нет книги
+        booksRepository.issueBook("c200", 4,"Kolya", 1245);
+        booksRepository.viewBooks();
+        System.out.println();
+        //еще одну книгу
+        booksRepository.issueBook("L200", 4,"Kolya", 1245);
+        booksRepository.issueBook("L200", 5,"John", 999);
+        booksRepository.viewBooks();
+        System.out.println();
+
+        //тест показать список выданных книг
+        booksRepository.viewIssuedBooks();
+
+        //тест возврата книги
+        System.out.println();
+        //нет книги в списке
+        booksRepository.returnBook("a25",6);
+
+        booksRepository.returnBook("L200", 4);
+        booksRepository.viewIssuedBooks();
+        System.out.println();
+        booksRepository.viewBooks();
 
     }
 }

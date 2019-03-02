@@ -1,5 +1,6 @@
 package lesson15.libraryManadger;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
@@ -12,6 +13,9 @@ public class Book {
     private int quantity;
     private int issued;
     private Date addededDate;
+
+    private User[] visitors;
+    private Date[] issuedDate;
 
     public Book(long id, String collno, String name, String author, String publisher, int quantity, int issued, Date addededDate) {
         this.id = id;
@@ -56,6 +60,10 @@ public class Book {
         return addededDate;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
@@ -68,21 +76,36 @@ public class Book {
         this.addededDate = addededDate;
     }
 
+    public User[] getVisitors() {
+        return visitors;
+    }
+
+    public void setVisitors(User[] visitors) {
+        this.visitors = visitors;
+    }
+
+    public Date[] getIssuedDate() {
+        return issuedDate;
+    }
+
+    public void setIssuedDate(Date[] issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return id == book.id &&
-                collno.equals(book.collno) &&
-                name.equals(book.name) &&
-                author.equals(book.author) &&
-                publisher.equals(book.publisher);
+        return collno.equals(book.collno)
+                && name.equals(book.name)
+                && author.equals(book.author)
+                && publisher.equals(book.publisher);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, collno, name, author, publisher);
+        return Objects.hash(collno, name, author, publisher);
     }
 
     @Override
@@ -96,6 +119,8 @@ public class Book {
                 ", quantity=" + quantity +
                 ", issued=" + issued +
                 ", addededDate=" + addededDate +
+                ", visitors=" + Arrays.toString(visitors) +
+                ", issuedDate=" + Arrays.toString(issuedDate) +
                 '}';
     }
 }
