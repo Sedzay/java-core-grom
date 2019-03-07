@@ -32,6 +32,8 @@ public class Solution {
         String[] strings1 = input.split( " ");
         int[] countWords = new int[strings.length];
 
+        int maxIndex = 0;
+
         for (int i = 0; i < strings.length; i++) {
             if (checkWord(strings[i])) {
                 for (int j = 0; j < strings1.length; j++) {
@@ -41,38 +43,29 @@ public class Solution {
                     }
                 }
             }
+            if(countWords[i] > countWords[maxIndex]) {
+                maxIndex = i;
+            }
         }
-        if (!checkReiteration(countWords))
+        boolean reiteration = false;
+        for (int count : countWords) {
+            if (count >= 1)
+                reiteration = true;
+        }
+        if (!reiteration)
             return null;
-        return strings[maxCounted(countWords)];
+
+        return strings[maxIndex];
     }
 
     private static boolean checkWord(String word) {
         char[] chars = word.toCharArray();
 
         for(char ch : chars) {
-            if(((65 <= ch && ch <= 90) || (97 <= ch && ch <= 122) || (1040 <= ch && ch <= 1103))) {
+            if(Character.isLetter(ch)) {
                 return true;
             }
         }
         return false;
-    }
-
-    private static boolean checkReiteration(int[] arr) {
-        for (int count : arr) {
-            if (count >= 1)
-                return true;
-        }
-        return false;
-    }
-
-    private static int maxCounted(int[] arr) {
-        int maxIndex = 0;
-        for (int i = 1; i < arr.length; i++) {
-            if(arr[i] > arr[maxIndex]) {
-                maxIndex = i;
-            }
-        }
-        return maxIndex;
     }
 }

@@ -33,8 +33,8 @@ public class Solution {
         String[] strings1 = address.split("//");
         if (checkStartAddress(strings1[0])) {
             String[] strings2 = strings1[1].split("\\.");
-            if (checkDomen(strings2[strings2.length - 1])) {
-                if (checkNameAddress(strings2))
+            if (checkDomen(strings2[strings2.length - 1]) && checkNameAddress(strings2)) {
+                //if (checkNameAddress(strings2))
                     return true;
             }
         }
@@ -69,7 +69,7 @@ public class Solution {
         char[] chars = word.toCharArray();
 
         for (char ch : chars) {
-            if (!((65 <= ch && ch <= 90) || (97 <= ch && ch <= 122) || (1040 <= ch && ch <= 1103) || (48 <= ch && ch <= 57))) {
+            if (!(Character.isDigit(ch) || Character.isLetter(ch))) {
                 return false;
             }
         }

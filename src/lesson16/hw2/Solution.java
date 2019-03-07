@@ -2,7 +2,7 @@ package lesson16.hw2;
 
 public class Solution {
     public static void main(String[] args) {
-        String word = "Аялот   It's    just test 1256165165165 or 3, 5 wordsnlnk when i must to get 9 words лолот ";
+        String word = "Аялот   It's    just test 1 or 3, 5 wordsnlnk when i must to get 9 words лолот ";
         System.out.println(maxWord(word));
         System.out.println(minWord(word));
     }
@@ -42,7 +42,7 @@ public class Solution {
         char[] chars = word.toCharArray();
 
         for(char ch : chars) {
-            if(((65 <= ch && ch <= 90) || (97 <= ch && ch <= 122) || (1040 <= ch && ch <= 1103))) {
+            if(Character.isLetter(ch)) {
                 return true;
             }
         }
