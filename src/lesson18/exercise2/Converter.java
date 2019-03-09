@@ -1,4 +1,4 @@
-package lesson17.exercise2;
+package lesson18.exercise2;
 
 public class Converter {
 

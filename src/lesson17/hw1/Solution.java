@@ -1,29 +1,33 @@
 package lesson17.hw1;
 
 public class Solution {
-    public int[] findNumbers(String text) {
-        if (text == null)
-            return null;
+    public static void main(String[] args) {
+        String word = "Аялот   It's    just test 1 or 3, 5 words, when i must to get 9 words лолот llkj ";
+        System.out.println(countWords(word));
 
-        String[] strings = text.split(" ");
+    }
+
+    public static int countWords(String input) {
         int count = 0;
+        if (input == null)
+            return count;
+        String[] strings = input.split(" ");
+
         for (String string : strings) {
-            try {
-                Integer.parseInt(string);
+            if (string != "" && checkWord(string))
                 count++;
-            } catch (Exception e) {
+        }
+        return count;
+    }
+
+    private static boolean checkWord(String word) {
+        char[] chars = word.toCharArray();
+
+        for(char ch : chars) {
+            if(Character.isDigit(ch) || Character.isLetter(ch)) {
+                return true;
             }
         }
-        int[] arrInt = new int[count];
-        count = 0;
-        for (String string : strings) {
-            try {
-                arrInt[count] = Integer.parseInt(string);
-                count++;
-            } catch (Exception e) {
-                System.out.println("not a number");
-            }
-        }
-        return arrInt;
+        return false;
     }
 }
