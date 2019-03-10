@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Controller {
 
-    public void put(Storage storage, File file) {
+    public void put(Storage storage, File file) throws Exception {
         if (storage == null || file == null)
             return;
 
@@ -23,35 +23,32 @@ public class Controller {
     }
 
 
-    public void delete(Storage storage, File file) {
+    public void delete(Storage storage, File file) throws Exception {
         if (storage == null || file == null)
             return;
 
-        try {
-            if (!fileInThere(storage, file))
-                throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storage.getId() + ", because it is non there");
+        if (!fileInThere(storage, file))
+            throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storage.getId() + ", because it is non there");
 
-            //delete file
-            for (int i = 0; i < storage.getFiles().length; i++) {
-                if (storage.getFiles()[i].equals(file))
-                    storage.getFiles()[i] = null;
-            }
-            File[] files = new File[storage.getFiles().length - 1];
-            for (int i = 0, j = 0; i < storage.getFiles().length; i++) {
-                if (storage.getFiles()[i] == null)
-                    continue;
-                files[j] = storage.getFiles()[i];
-                j++;
-            }
-            storage.setFiles(files);
-            System.out.println("File with id " + file.getId() + " delete successfully in storage with id " + storage.getId());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        //delete file
+        for (int i = 0; i < storage.getFiles().length; i++) {
+            if (storage.getFiles()[i].equals(file))
+                storage.getFiles()[i] = null;
         }
+        File[] files = new File[storage.getFiles().length - 1];
+        for (int i = 0, j = 0; i < storage.getFiles().length; i++) {
+            if (storage.getFiles()[i] == null)
+                continue;
+            files[j] = storage.getFiles()[i];
+            j++;
+        }
+        storage.setFiles(files);
+        System.out.println("File with id " + file.getId() + " delete successfully in storage with id " + storage.getId());
+
     }
 
 
-    public void transferAll(Storage storageFrom, Storage storageTo) {
+    public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
         if (storageFrom == null || storageTo == null) {
             System.out.println("Storage From or Storage To does not exist");
             return;
@@ -63,43 +60,36 @@ public class Controller {
 
     }
 
-    public void transferFile(Storage storageFrom, Storage storageTo, long id) {
+    public void transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
         if (storageFrom == null || storageTo == null) {
             System.out.println("Storage From or Storage To does not exist");
             return;
         }
         File file = findFileById(storageFrom, id);
-        try {
-            if (file == null)
-                throw new Exception("File with id " + id + " not found in storage with id " + storageFrom.getId());
-            if (!fileInThere(storageFrom, file))
-                throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storageFrom.getId() + ", because it is non there");
+        if (file == null)
+            throw new Exception("File with id " + id + " not found in storage with id " + storageFrom.getId());
+        if (!fileInThere(storageFrom, file))
+            throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storageFrom.getId() + ", because it is non there");
 
-            if (checkFile(storageTo, file)) {
-                put(storageTo, file);
-                delete(storageFrom, file);
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        if (checkFile(storageTo, file)) {
+            put(storageTo, file);
+            delete(storageFrom, file);
         }
     }
 
 
-    private boolean checkFile(Storage storage, File file) {
-        try {
-            if (!formatIsCorrect(storage, file))
-                throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because this storage supported formats as " + Arrays.toString(storage.getFormatsSupported()) + ". This file have format " + file.getFormat());
+    private boolean checkFile(Storage storage, File file) throws Exception {
 
-            if (fileInThere(storage, file))
-                throw new Exception("File with id " + file.getId() + " already exists in in storage with id " + storage.getId());
+        if (!formatIsCorrect(storage, file))
+            throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because this storage supported formats as " + Arrays.toString(storage.getFormatsSupported()) + ". This file have format " + file.getFormat());
 
-            if (storage.getFilledSize() + file.getSize() > storage.getStorageSize())
-                throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because size in storage not enough. Last size is " + (storage.getStorageSize() - storage.getFilledSize()) + ". New file size is " + file.getSize());
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
+        if (fileInThere(storage, file))
+            throw new Exception("File with id " + file.getId() + " already exists in in storage with id " + storage.getId());
+
+        if (storage.getFilledSize() + file.getSize() > storage.getStorageSize())
+            throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because size in storage not enough. Last size is " + (storage.getStorageSize() - storage.getFilledSize()) + ". New file size is " + file.getSize());
+        return true;
+
     }
 
     private boolean fileInThere(Storage storage, File file) {
