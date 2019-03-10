@@ -5,11 +5,11 @@ import java.util.Arrays;
 public class Controller {
 
     public void put(Storage storage, File file) throws Exception {
-        if (storage == null || file == null)
+        if (storage == null)
             return;
 
         //add file
-        if (checkFile(storage, file)) {
+        if (checkAddFile(storage, file)) {
             File[] files = storage.getFiles();
             if (files == null) {
                 files = new File[]{file};
@@ -24,11 +24,11 @@ public class Controller {
 
 
     public void delete(Storage storage, File file) throws Exception {
-        if (storage == null || file == null)
+        if (storage == null)
             return;
 
-        if (!fileInThere(storage, file))
-            throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storage.getId() + ", because it is non there");
+        if(!checkDeleteFile(storage, file))
+            return;
 
         //delete file
         for (int i = 0; i < storage.getFiles().length; i++) {
@@ -49,14 +49,26 @@ public class Controller {
 
 
     public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
+        //проверить хранилища пустые или нет
         if (storageFrom == null || storageTo == null) {
             System.out.println("Storage From or Storage To does not exist");
             return;
         }
-
+        //проверить файлы хранилища Из
+        boolean checkFilesToTransfer = true;
         for (File file : storageFrom.getFiles()) {
-            transferFile(storageFrom, storageTo, file.getId());
+            if (!checkAddFile(storageTo,file) || !checkDeleteFile(storageFrom,file)) {
+                checkFilesToTransfer = false;
+                break;
+            }
         }
+        if (checkFilesToTransfer) {
+            for (File file : storageFrom.getFiles()) {
+                transferFile(storageFrom, storageTo, file.getId());
+            }
+            System.out.println("Transfer all files in storage with id " + storageTo.getId() + " is done!");
+        }
+
 
     }
 
@@ -65,34 +77,42 @@ public class Controller {
             System.out.println("Storage From or Storage To does not exist");
             return;
         }
-        File file = findFileById(storageFrom, id);
-        if (file == null)
-            throw new Exception("File with id " + id + " not found in storage with id " + storageFrom.getId());
-        if (!fileInThere(storageFrom, file))
-            throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storageFrom.getId() + ", because it is non there");
 
-        if (checkFile(storageTo, file)) {
-            put(storageTo, file);
+        File file = findFileById(storageFrom, id);
+        if(checkDeleteFile(storageFrom, file) && checkAddFile(storageTo, file)) {
             delete(storageFrom, file);
+            put(storageTo, file);
+            System.out.println("Transfer file with id " + id + " in storage with id " + storageTo.getId() + " is done!");
         }
+
     }
 
 
-    private boolean checkFile(Storage storage, File file) throws Exception {
+    private boolean checkAddFile(Storage storage, File file) throws Exception {
+        if (file == null)
+            return false;
 
         if (!formatIsCorrect(storage, file))
             throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because this storage supported formats as " + Arrays.toString(storage.getFormatsSupported()) + ". This file have format " + file.getFormat());
 
-        if (fileInThere(storage, file))
+        if (sameFile(storage, file))
             throw new Exception("File with id " + file.getId() + " already exists in in storage with id " + storage.getId());
 
         if (storage.getFilledSize() + file.getSize() > storage.getStorageSize())
             throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because size in storage not enough. Last size is " + (storage.getStorageSize() - storage.getFilledSize()) + ". New file size is " + file.getSize());
         return true;
-
     }
 
-    private boolean fileInThere(Storage storage, File file) {
+    private boolean checkDeleteFile(Storage storage, File file) throws Exception {
+        if (file == null)
+            return false;
+        if (!sameFile(storage, file))
+            throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storage.getId() + ", because it is non there");
+
+        return true;
+    }
+
+    private boolean sameFile(Storage storage, File file) {
         boolean validation = false;
         if (storage.getFiles() != null) {
             for (File file1 : storage.getFiles()) {

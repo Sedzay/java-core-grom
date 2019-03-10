@@ -14,7 +14,7 @@ public class File {
         if (name.length() <= 10)
             this.name = name;
         else
-            throw new RuntimeException ("Length of name must be less or equals 10 chars. Length file = " + name.length());
+            throw new RuntimeException("Length of name must be less or equals 10 chars. Length file = " + name.length());
 
         this.format = format;
         this.size = size;
@@ -41,13 +41,12 @@ public class File {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         File file = (File) o;
-        return id == file.id &&
-                name.equals(file.name);
+        return id == file.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id);
     }
 
     @Override
