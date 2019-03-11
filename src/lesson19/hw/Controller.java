@@ -111,11 +111,15 @@ public class Controller {
 
     private void checkDeleteFile(Storage storage, File file) throws Exception {
         if (storage.getFiles() != null) {
-            if (!sameFile(storage, file)) {
-                //System.err.println("Wrong file");
-                throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storage.getId() + ", because it is non there");
+            for (File file1 : storage.getFiles()) {
+                if (file1 == null || !file1.equals(file) || file1.getName()!=file.getName())
+                    throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storage.getId() + ", because it is non there");
             }
-            return;
+//            if (!sameFile(storage, file)) {
+//                //System.err.println("Wrong file");
+//                throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storage.getId() + ", because it is non there");
+//            }
+
         }
     }
 
