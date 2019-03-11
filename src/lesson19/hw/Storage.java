@@ -57,7 +57,8 @@ public class Storage {
         long sumSizeAllFiles = 0;
         if (this.files != null) {
             for (File file : files) {
-                sumSizeAllFiles += file.getSize();
+                if (file != null)
+                    sumSizeAllFiles += file.getSize();
             }
         }
         return sumSizeAllFiles;

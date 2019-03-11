@@ -19,7 +19,7 @@ public class Demo {
         //добавление storage
         //Поддерживаемые форматы
         Controller controller = new Controller();
-        Storage storage1 = new Storage(101, null, new String[]{"txt", "jpg", "png"}, "USA", 100);
+        Storage storage1 = new Storage(101, new File[3], new String[]{"txt", "jpg", "png"}, "USA", 100);
 
         try {
             System.out.println();
@@ -29,7 +29,7 @@ public class Demo {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
+        System.out.println(storage1);
         //добавить еще один файл с непддерживаемым форматом
         File file2 = new File(10002, "file2", "xls", 12);
         try {
@@ -41,61 +41,74 @@ public class Demo {
         //добавить еще один файл, выйти за размеры хранилища
         File file3 = new File(10003, "file3", "txt", 100);
         try {
+            System.out.println(storage1);
             controller.put(storage1, file3);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
-            //добавить еще один нормальный файл
-            File file4 = new File(10004, "file4", "png", 20);
+        //добавить еще один нормальный файл
+        File file4 = new File(10004, "file4", "png", 20);
         try {
             controller.put(storage1, file4);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-            //добавить файл с таким же ИД
-            File file5 = new File(10001, "fileEquals", "png", 20);
+        //добавить файл с таким же ИД
+        File file5 = new File(10001, "fileEquals", "png", 20);
         try {
             controller.put(storage1, file5);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-            //добавить файл с другим ИД и таким же Именем
-            File file6 = new File(10006, "fileEquals", "txt", 20);
+        System.out.println(storage1);
+        //добавить файл с другим ИД и таким же Именем
+        File file6 = new File(10006, "fileEquals", "txt", 20);
         try {
             controller.put(storage1, file6);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
-            System.out.println();
-            System.out.println(storage1);
+        System.out.println();
 
-            System.out.println();
-            System.out.println("DELETE FILES IN STORAGE*******************");
+        //добавить лишний файл
+        File file7 = new File(10007, "file7", "txt", 10);
+        try {
+            controller.put(storage1, file7);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(storage1);
 
-            try {
-                controller.delete(storage1,null);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
+        System.out.println("DELETE FILES IN STORAGE*******************");
 
-            //удалить не существующий файл
+        try {
+            controller.delete(storage1, null);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        //удалить не существующий файл
         try {
             controller.delete(storage1, file3);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-            System.out.println(storage1);
+        System.out.println(storage1);
 
-            //удалить файл с таким же ИД, но другим именем
-            File file7 = new File(10001, "file1", "jpg", 12);
-            try {
-                controller.delete(storage1, file7);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            System.out.println(storage1);
+
+        //удалить файл с таким же ИД, но другим именем
+        //********************************************************************
+        //если сайт вывалит в ошибку проверять совпадение ИД + Наименование
+        file7 = new File(10001, "file1", "jpg", 12);
+        try {
+            controller.delete(storage1, file7);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(storage1);
+        //********************************************************************
 
             //удалить файл с другим ИД, но таким же именем
             File file8 = new File(10008, "fileEquals", "txt", 20);
@@ -130,7 +143,7 @@ public class Demo {
                 System.out.println(e.getMessage());
             }
 
-            storage2 = new Storage(102, null, new String[]{"txt", "xls"}, "UK", 1000);
+            storage2 = new Storage(102, new File[3], new String[]{"txt", "xls", "jpg"}, "UK", 1000);
 
             // тестирование перемещения всех файлов
 
@@ -151,7 +164,7 @@ public class Demo {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
+        System.out.println(storage2);
 
             System.out.println();
             //разный формат
@@ -160,18 +173,17 @@ public class Demo {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-            System.out.println();
-            System.out.println(storage1);
-            System.out.println(storage2);
-            System.out.println();
+        System.out.println(storage1);
+        System.out.println(storage2);
 
             //еще одно хранилище, куда все можно переместить
-            Storage storage3 = new Storage(103, null, new String[]{"txt", "xls", "jpg", "png"}, "UA", 1000);
+            Storage storage3 = new Storage(103, new File[4], new String[]{"txt", "xls", "jpg", "png"}, "UA", 1000);
             try {
             controller.transferAll(storage1, storage3);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
+        System.out.println(storage3);
             try {
             controller.transferAll(storage2, storage3);
             } catch (Exception e) {
@@ -181,6 +193,29 @@ public class Demo {
             System.out.println(storage2);
             System.out.println(storage3);
             System.out.println();
+            //добавитьеще один файл ипереместить обратно
+        try {
+            controller.put(storage3,file1);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(storage3);
+        System.out.println(storage3.getFilledSize());
+        try {
+            controller.transferAll(storage3, storage2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        //переместить в хранилище если не хватает размера
+        Storage storage4 = new Storage(104, new File[4], new String[]{"txt", "xls", "jpg", "png"}, "UA2", 64);
+        try {
+            controller.transferAll(storage3, storage4);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(storage3);
+        System.out.println(storage4);
 
             System.out.println();
             System.out.println("TRANSFER FILE BY ID IN STORAGE TO*******************");
@@ -197,13 +232,20 @@ public class Demo {
         }
             //формат не подходит
         try {
-            controller.transferFile(storage3, storage1, 10002);
+            controller.transferFile(storage4, storage1, 10002);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        //не достаточо пустых мест в хранилище
+        try {
+            controller.put(storage1,  file3);
+            controller.transferFile(storage1, storage4,10003);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
             //все нормально
         try {
-            controller.transferFile(storage3, storage1, 10006);
+            controller.transferFile(storage4, storage1, 10006);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
