@@ -5,11 +5,10 @@ import java.util.Arrays;
 public class Controller {
 
     public void put(Storage storage, File file) throws Exception {
-        if (storage == null || file == null) {
-            System.err.println("Storage or file is null");
+        if (storage.getFiles() == null) {
+            System.out.println("storage has not place for files");
             return;
         }
-
         checkAddFile(storage, file);
         //add file
         for (int i = 0; i < storage.getFiles().length; i++) {
@@ -23,11 +22,10 @@ public class Controller {
 
 
     public void delete(Storage storage, File file) throws Exception {
-        if (storage == null || file == null) {
-            System.err.println("Storage or file is null");
+        if (storage.getFiles() == null) {
+            System.out.println("storage has not place for files");
             return;
         }
-
         checkDeleteFile(storage, file);
 
         //delete file
@@ -40,17 +38,15 @@ public class Controller {
 
 
     public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
-        //проверить хранилища пустые или нет
-        if (storageFrom == null || storageTo == null) {
-            System.err.println("Storage From or Storage To does not exist");
+        if (storageTo.getFiles() == null || storageFrom.getFiles() == null) {
+            System.out.println("storage has not place for files");
             return;
         }
-
         checkTransferAllFiles(storageFrom, storageTo);
 
         for (int i = 0; i < storageFrom.getFiles().length; i++) {
             for (int j = 0; j < storageTo.getFiles().length; j++) {
-                if(storageFrom.getFiles()[i] != null && storageTo.getFiles()[j] == null) {
+                if (storageFrom.getFiles()[i] != null && storageTo.getFiles()[j] == null) {
                     storageTo.getFiles()[j] = storageFrom.getFiles()[i];
                     storageFrom.getFiles()[i] = null;
                     break;
@@ -63,15 +59,8 @@ public class Controller {
     }
 
     public void transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
-        if (storageFrom == null || storageTo == null) {
-            System.err.println("Storage From or Storage To does not exist");
-            return;
-        }
+
         File file = findFileById(storageFrom, id);
-        if(file == null) {
-            System.err.println("File with id " + id + " not found");
-            return;
-        }
         checkDeleteFile(storageFrom, file);
         checkAddFile(storageTo, file);
         delete(storageFrom, file);
@@ -81,109 +70,91 @@ public class Controller {
     }
 
     private void checkAddFile(Storage storage, File file) throws Exception {
-        if (!formatIsCorrect(storage, file)) {
-            //System.err.println("Format is not correct");
-            throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because this storage supported formats as " + Arrays.toString(storage.getFormatsSupported()) + ". This file have format " + file.getFormat());
-        }
-
-        if (storage.getFiles() != null) {
-
-            if (sameFile(storage, file)) {
-                //System.err.println("Same file already exist");
-                throw new Exception("File with id " + file.getId() + " already exists in in storage with id " + storage.getId());
-            }
-
-            boolean checkFreePlace = false;
-            for (File file1 : storage.getFiles()) {
-                if (file1 == null) {
-                    checkFreePlace = true;
-                }
-            }
-            if (!checkFreePlace)
-                throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because storage is full");
-        }
-
-        if (storage.getFilledSize() + file.getSize() > storage.getStorageSize()) {
-            //System.err.println("Size over");
+        formatIsCorrect(storage, file);
+        sameFile(storage, file);
+        checkFreePlace(storage, file);
+        if (storage.getFilledSize() + file.getSize() > storage.getStorageSize())
             throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because size in storage not enough. Last size is " + (storage.getStorageSize() - storage.getFilledSize()) + ". New file size is " + file.getSize());
-        }
+
     }
 
     private void checkDeleteFile(Storage storage, File file) throws Exception {
-        if (storage.getFiles() != null) {
-            for (File file1 : storage.getFiles()) {
-                if (file1 == null || !file1.equals(file) || file1.getName()!=file.getName())
-                    throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storage.getId() + ", because it is non there");
-            }
-//            if (!sameFile(storage, file)) {
-//                //System.err.println("Wrong file");
-//                throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storage.getId() + ", because it is non there");
-//            }
-
+        for (File file1 : storage.getFiles()) {
+            if (file1 != null && file1.equals(file))
+                return;
         }
+        throw new Exception("File with id " + file.getId() + " and name " + file.getName() + " has not been deleted in storage with id " + storage.getId() + ", because it is non there");
     }
 
     private void checkTransferAllFiles(Storage storageFrom, Storage storageTo) throws Exception {
-        //проверить нет ли такого же файла в другом хранилище
+        //найти файлы для перемещения
+        //проверить возможность добавления файлов в другое хранилище
         //посчитать количество файлов для перемещения
-        if (storageTo.getFiles() != null && storageFrom.getFiles() != null) {
-            int countFilesToTransfer = 0;
-            int countFreePlaceToTransfer = 0;
-            for (File file : storageTo.getFiles()) {
-                if (file != null)
-                    checkDeleteFile(storageFrom, file);
-                else
-                    countFreePlaceToTransfer++;
+
+        int countFilesToTransfer = 0;
+        for (File file : storageFrom.getFiles()) {
+            if(file != null) {
+                formatIsCorrect(storageTo, file);
+                sameFile(storageTo, file);
+                countFilesToTransfer++;
             }
-
-            //проверить возможность добавления файлов
-            //посчитать количество пустых мест
-
-            for (File file : storageFrom.getFiles()) {
-                if (file != null) {
-                    checkAddFile(storageTo, file);
-                    countFilesToTransfer++;
-                }
-            }
-            //проверить хватает ли пустых мест для перемещения
-            if (countFreePlaceToTransfer < countFilesToTransfer)
-                throw new Exception("Can not to transfer all files, because not enough free place in storage with id " + storageTo.getId());
-
-            //проверить достатчноли места для перемещения
-            if (storageTo.getStorageSize() - storageTo.getFilledSize() < storageFrom.getFilledSize())
-                throw new Exception("Can not to transfer all files, because not enough size in storage with id " + storageTo.getId());
-        }
-    }
-
-    private boolean sameFile(Storage storage, File file) {
-        boolean validation = false;
-        for (File file1 : storage.getFiles()) {
-            if (file1 != null && file1.equals(file))
-                validation = true;
         }
 
-        return validation;
+        if(countFilesToTransfer == 0)
+            throw new Exception("In storage with id " + storageFrom.getId() + " has not files for transfer");
+
+        //проверить другое хранилище на наличие пустых мест
+        //посчитать количество пустых мест
+        int countFreePlaceToTransfer = 0;
+        for (File file : storageTo.getFiles()) {
+            if (file == null)
+                countFreePlaceToTransfer++;
+        }
+
+        //проверить хватает ли пустых мест для перемещения
+        if (countFreePlaceToTransfer < countFilesToTransfer)
+            throw new Exception("Can not to transfer all files, because not enough free place in storage with id " + storageTo.getId());
+
+        //проверить достатчноли места для перемещения
+        if (storageTo.getStorageSize() - storageTo.getFilledSize() < storageFrom.getFilledSize())
+            throw new Exception("Can not to transfer all files, because not enough size in storage with id " + storageTo.getId());
+
     }
 
-    private boolean formatIsCorrect(Storage storage, File file) {
-        boolean validation = false;
+
+    private void formatIsCorrect(Storage storage, File file) throws Exception {
         for (String format : storage.getFormatsSupported()) {
-            if (file.getFormat() == format)
-                validation = true;
+            if (file.getFormat().equals(format))
+                return;
         }
-        return validation;
+        throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because this storage supported formats as " + Arrays.toString(storage.getFormatsSupported()) + ". This file have format " + file.getFormat());
     }
 
-    private File findFileById(Storage storage, long id) {
-        File file = null;
+    private void sameFile(Storage storage, File file) throws Exception {
+        for (File file1 : storage.getFiles()) {
+            if (file1 != null && file1.getId() == file.getId())
+                throw new Exception("File with id " + file.getId() + " already exists in in storage with id " + storage.getId());
+        }
+    }
+
+    private void checkFreePlace(Storage storage, File file) throws Exception {
+        for (File file1 : storage.getFiles()) {
+            if (file1 == null) {
+                return;
+            }
+        }
+        throw new Exception("File with id " + file.getId() + " has not been added in storage with id " + storage.getId() + ", because storage is full");
+    }
+
+    private File findFileById(Storage storage, long id) throws Exception {
         if (storage.getFiles() != null) {
             int i = 0;
             for (File file1 : storage.getFiles()) {
                 if (file1 != null && file1.getId() == id)
-                    file = storage.getFiles()[i];
+                    return storage.getFiles()[i];
                 i++;
             }
         }
-        return file;
+        throw new Exception("File with id " + id + " not found in storage with id " + storage.getId());
     }
 }
