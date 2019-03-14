@@ -4,7 +4,7 @@ import lesson20.task2.exception.InternalServerException;
 import lesson20.task2.exception.LimitExceeded;
 
 public class Controller {
-    TransactionDAO transactionDAO = new TransactionDAO();
+    private TransactionDAO transactionDAO = new TransactionDAO();
 
     public Transaction save(Transaction transaction) throws Exception {
 
