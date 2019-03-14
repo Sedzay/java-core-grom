@@ -14,18 +14,18 @@ public class Controller {
 
     public Transaction[] transactionList() {
 
-        return null;
+        return transactionDAO.transactionList();
     }
 
 
     public Transaction[] transactionList(String city) {
 
-        return null;
+        return transactionDAO.transactionList(city);
     }
 
 
     public Transaction[] transactionList(int amount) {
 
-        return null;
+        return transactionDAO.transactionList(amount);
     }
 }

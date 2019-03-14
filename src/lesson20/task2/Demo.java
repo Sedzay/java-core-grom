@@ -15,7 +15,7 @@ public class Demo {
             System.out.println(e.getMessage());
         }
 
-        System.out.println(Arrays.toString(controller.transactionDAO.transactionList()));
+        System.out.println(Arrays.toString(controller.transactionList()));
 
         //превышение разового лимита количества по транзакции
         Transaction transaction2 = new Transaction(10002, "Kiev",100,"someTransaction", TransactionType.INCOME,new Date());
@@ -24,7 +24,7 @@ public class Demo {
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println(Arrays.toString(controller.transactionDAO.transactionList()));
+        System.out.println(Arrays.toString(controller.transactionList()));
 
         //превышение лимита количества за день
         transaction2 = new Transaction(10002, "Kiev",40,"someTransaction", TransactionType.INCOME,new Date());
@@ -37,7 +37,7 @@ public class Demo {
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println(Arrays.toString(controller.transactionDAO.transactionList()));
+        System.out.println(Arrays.toString(controller.transactionList()));
 
         //транзакция с недопустимым городом
         Transaction transaction5 = new Transaction(10005, "Dnepr",40,"someTransaction", TransactionType.INCOME,new Date());
@@ -57,7 +57,7 @@ public class Demo {
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println(Arrays.toString(controller2.transactionDAO.transactionList()));
+        System.out.println(Arrays.toString(controller2.transactionList()));
 
         //превышение количества транзакций за день
         transaction6 = new Transaction(10006, "Odessa",5,"someTransaction", TransactionType.INCOME,new Date());
@@ -85,12 +85,12 @@ public class Demo {
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println(Arrays.toString(controller2.transactionDAO.transactionList()));
+        System.out.println(Arrays.toString(controller2.transactionList()));
 
         //отфильтровать транзакции по городу
-        System.out.println(Arrays.toString(controller2.transactionDAO.transactionList("Odessa")));
+        System.out.println(Arrays.toString(controller2.transactionList("Odessa")));
 
         //отфильтровать по сумме
-        System.out.println(Arrays.toString(controller2.transactionDAO.transactionList(5)));
+        System.out.println(Arrays.toString(controller2.transactionList(5)));
     }
 }

@@ -12,6 +12,8 @@ public class TransactionDAO {
     private Utils utils = new Utils();
 
     public Transaction save(Transaction transaction) throws Exception {
+        if (transaction == null)
+            throw new BadRequestException("Transaction is null");
         //сумма транзакций больше лимита +
         //сумма транзакций за день больше дневного лимита +
         //количество транзакций за день больше указанного лимита +
@@ -71,12 +73,12 @@ public class TransactionDAO {
     }
 
 
-    Transaction[] transactionList() {
+    public Transaction[] transactionList() {
         return transactions;
     }
 
 
-    Transaction[] transactionList(String city) {
+    public Transaction[] transactionList(String city) {
         int count = 0;
         for (Transaction transaction : transactions) {
             if (transaction != null && transaction.getCity().equals(city))
@@ -95,7 +97,7 @@ public class TransactionDAO {
     }
 
 
-    Transaction[] transactionList(int amount) {
+    public Transaction[] transactionList(int amount) {
         int count = 0;
         for (Transaction transaction : transactions) {
             if (transaction != null && transaction.getAmount() == amount)
