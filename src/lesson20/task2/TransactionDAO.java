@@ -60,10 +60,10 @@ public class TransactionDAO {
         if (!checkCity)
             throw new BadRequestException("City is not allowed for transaction with id: " + transaction.getId());
 
-        for (Transaction tr : transactions) {
+        /*for (Transaction tr : transactions) {
             if (tr != null && tr.getId() == transaction.getId())
                 throw new BadRequestException("Transaction with id: " + transaction.getId() + " already exist");
-        }
+        }*/
 
         for (Transaction tr : transactions) {
             if (tr == null)
