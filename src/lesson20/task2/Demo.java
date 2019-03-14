@@ -8,12 +8,15 @@ public class Demo {
         Transaction transaction = new Transaction(10001, "Kiev",10,"someTransaction", TransactionType.INCOME,new Date());
 
         //тест сохранения
+
         Controller controller = new Controller();
         try {
-            controller.save(transaction);
+            Transaction returnTransaction = controller.save(transaction);
+            System.out.println(returnTransaction);
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
 
         System.out.println(Arrays.toString(controller.transactionList()));
 

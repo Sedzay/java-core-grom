@@ -79,13 +79,13 @@ public class TransactionDAO {
 
 
     public Transaction[] transactionList(String city) {
-        int count = 0;
+        /*int count = 0;
         for (Transaction transaction : transactions) {
             if (transaction != null && transaction.getCity().equals(city))
                 count++;
-        }
+        }*/
 
-        Transaction[] transactionsPerCity = new Transaction[count];
+        Transaction[] transactionsPerCity = new Transaction[/*count*/transactions.length];
         int index = 0;
         for (Transaction transaction : transactions) {
             if (transaction != null && transaction.getCity().equals(city)) {
@@ -98,19 +98,20 @@ public class TransactionDAO {
 
 
     public Transaction[] transactionList(int amount) {
-        int count = 0;
+        /*int count = 0;
         for (Transaction transaction : transactions) {
             if (transaction != null && transaction.getAmount() == amount)
                 count++;
-        }
+        }*/
 
-        Transaction[] transactionsPerAmount = new Transaction[count];
+        Transaction[] transactionsPerAmount = new Transaction[/*count*/transactions.length];
         int index = 0;
         for (Transaction transaction : transactions) {
             if (transaction != null && transaction.getAmount() == amount) {
                 transactionsPerAmount[index] = transaction;
                 index++;
             }
+
         }
         return transactionsPerAmount;
     }
