@@ -51,7 +51,7 @@ public class TransactionDAO {
         checkCity(utils.getCities(), transaction);
 
         for (Transaction tr : transactions) {
-            if (tr != null && tr.equals(transaction))
+            if (tr != null && tr.getId() == transaction.getId())
                 throw new BadRequestException("Transaction with id: " + transaction.getId() + " already exist");
         }
 
