@@ -36,7 +36,7 @@ public class TransactionDAO {
         if (transaction.getAmount() > utils.getLimitSimpleTransactionAmount())
             throw new LimitExceeded("Transaction limit exceed " + transaction.getId() + ". Can't be saved");
 
-        int sum = 0;
+        long sum = 0;
         int count = 0;
         for (Transaction tr : getTransactionsPerDay(transaction.getDateCreated())) {
             sum += transaction.getAmount();
