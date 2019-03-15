@@ -45,13 +45,13 @@ public class TransactionDAO {
         if (sum >= utils.getLimitTransactionsPerDayAmount())
             throw new LimitExceeded("Transaction limit  amount exceed " + transaction.getId() + ". Can't be saved");
 
-        if (count >= utils.getLimitTransactionsPerDayCount())
+        if (count > utils.getLimitTransactionsPerDayCount())
             throw new LimitExceeded("Transaction limit per day count exceed " + transaction.getId() + ". Can't be saved");
 
         checkCity(utils.getCities(), transaction);
 
         for (Transaction tr : transactions) {
-            if (tr != null && tr.getId() == transaction.getId())
+            if (tr != null && tr.equals(transaction))
                 throw new BadRequestException("Transaction with id: " + transaction.getId() + " already exist");
         }
 
