@@ -12,8 +12,6 @@ public class TransactionDAO {
     private Utils utils = new Utils();
 
     public Transaction save(Transaction transaction) throws Exception {
-        if (transaction == null)
-            throw new BadRequestException("Transaction is null");
         //сумма транзакций больше лимита +
         //сумма транзакций за день больше дневного лимита +
         //количество транзакций за день больше указанного лимита +
@@ -38,32 +36,33 @@ public class TransactionDAO {
         if (transaction.getAmount() > utils.getLimitSimpleTransactionAmount())
             throw new LimitExceeded("Transaction limit exceed " + transaction.getId() + ". Can't be saved");
 
-        long sum = 0;
+        int sum = 0;
         int count = 0;
         for (Transaction tr : getTransactionsPerDay(transaction.getDateCreated())) {
             sum += transaction.getAmount();
             count++;
         }
-        if (sum > utils.getLimitTransactionsPerDayAmount())
+        if (sum >= utils.getLimitTransactionsPerDayAmount())
             throw new LimitExceeded("Transaction limit  amount exceed " + transaction.getId() + ". Can't be saved");
 
-        if (count > utils.getLimitTransactionsPerDayCount())
+        if (count >= utils.getLimitTransactionsPerDayCount())
             throw new LimitExceeded("Transaction limit per day count exceed " + transaction.getId() + ". Can't be saved");
 
-        boolean checkCity = false;
+
+        int index = 0;
         for (String city : utils.getCities()) {
             if (city.equals(transaction.getCity())) {
-                checkCity = true;
                 break;
             }
+            if (index == utils.getCities().length - 1)
+                throw new BadRequestException("City is not allowed for transaction with id: " + transaction.getId());
+            index++;
         }
-        if (!checkCity)
-            throw new BadRequestException("City is not allowed for transaction with id: " + transaction.getId());
 
-        /*for (Transaction tr : transactions) {
-            if (tr != null && tr.getId() == transaction.getId())
+        for (Transaction tr : transactions) {
+            if (tr != null && tr.equals(transaction))
                 throw new BadRequestException("Transaction with id: " + transaction.getId() + " already exist");
-        }*/
+        }
 
         for (Transaction tr : transactions) {
             if (tr == null)

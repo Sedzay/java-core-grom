@@ -50,6 +50,7 @@ public class Demo {
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        System.out.println(Arrays.toString(controller2.transactionList()));
 
         //сохранение транзакциис одинаковым ИД
         transaction5 = new Transaction(10005, "Odessa",5,"someTransaction", TransactionType.INCOME,new Date());
