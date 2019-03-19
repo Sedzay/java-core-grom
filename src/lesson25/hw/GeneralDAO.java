@@ -1,7 +1,5 @@
 package lesson25.hw;
 
-import lesson25.IdEntity;
-
 import java.util.Arrays;
 
 public class GeneralDAO <T> {
