@@ -4,28 +4,28 @@ import java.util.Arrays;
 
 public class Controller {
 
-    public void put(Storage storage, File file) throws Exception {
-        if (storage.getFiles() == null) {
-            System.out.println("storage has not place for files");
-            return;
-        }
+    public File put(Storage storage, File file) throws Exception {
+        if (storage.getFiles() == null)
+            throw new Exception("storage has not place for files");
+
         checkAddFile(storage, file);
         //add file
-        for (int i = 0; i < storage.getFiles().length; i++) {
+        int i;
+        for (i = 0; i < storage.getFiles().length; i++) {
             if (storage.getFiles()[i] == null) {
                 storage.getFiles()[i] = file;
                 break;
             }
         }
         System.out.println("File with id " + file.getId() + " add successfully in storage with id " + storage.getId());
+        return storage.getFiles()[i];
     }
 
 
     public void delete(Storage storage, File file) throws Exception {
-        if (storage.getFiles() == null) {
-            System.out.println("storage has not place for files");
-            return;
-        }
+        if (storage.getFiles() == null)
+            throw new Exception("storage has not place for files");
+
         checkDeleteFile(storage, file);
 
         //delete file
@@ -38,10 +38,7 @@ public class Controller {
 
 
     public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
-        if (storageTo.getFiles() == null || storageFrom.getFiles() == null) {
-            System.out.println("storage has not place for files");
-            return;
-        }
+
         checkTransferAllFiles(storageFrom, storageTo);
 
         for (int i = 0; i < storageFrom.getFiles().length; i++) {
