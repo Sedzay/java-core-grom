@@ -2,14 +2,13 @@ package lesson25.hw;
 
 import java.util.Objects;
 
-public class Order extends IdIdentity {
+public class Order{
     private long id;
 
     public Order(long id) {
         this.id = id;
     }
 
-    @Override
     public long getId() {
         return id;
     }

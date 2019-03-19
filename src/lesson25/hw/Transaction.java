@@ -2,7 +2,7 @@ package lesson25.hw;
 
 import java.util.Objects;
 
-public class Transaction extends IdIdentity {
+public class Transaction {
     private long id;
     private int amount;
 
@@ -11,7 +11,6 @@ public class Transaction extends IdIdentity {
         this.amount = amount;
     }
 
-    @Override
     public long getId() {
         return id;
     }

@@ -2,7 +2,7 @@ package lesson25.hw;
 
 import java.util.Objects;
 
-public class User extends IdIdentity {
+public class User {
     private long id;
     private String name;
 
@@ -11,7 +11,6 @@ public class User extends IdIdentity {
         this.name = name;
     }
 
-    @Override
     public long getId() {
         return id;
     }
