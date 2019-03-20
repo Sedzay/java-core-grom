@@ -15,6 +15,7 @@ public class Order {
         this.shopIdentificator = shopIdentificator;
     }
 
+
     public long getId() {
         return id;
     }

@@ -8,12 +8,12 @@ public class ArrayListTest {
     public ArrayList<Order> useList() {
         ArrayList<Order> list = new ArrayList<>();
         //add
-        list.add(new Order(10001, 100,"usd", "itemName1","someId"));
-        list.add(new Order(10002, 200,"ua", "itemName2","someId"));
+        list.add(new Order(10001, 100, "usd", "itemName1", "someId"));
+        list.add(new Order(10002, 200, "ua", "itemName2", "someId"));
         System.out.println(list);
 
         //add by index
-        Order order3 = new Order(10003, 555,"eur", "itemName3","someId3");
+        Order order3 = new Order(10003, 555, "eur", "itemName3", "someId3");
         list.add(1, order3);
         System.out.println(list);
 
@@ -27,12 +27,12 @@ public class ArrayListTest {
 
         //addAll
         ArrayList<Order> list2 = new ArrayList<>();
-        Order order4 = new Order(10004, 12,"eur", "itemName5","someId");
-        Order order5 = new Order(10005, 2,"eur", "itemName","someId");
-        Order order6 = new Order(10006, 120,"eur", "itemName","someId");
-        Order order7 = new Order(10007, 10,"eur", "itemName","someId");
-        Order order8 = new Order(10008, 303,"eur", "itemName","someId");
-        Order order9 = new Order(10009, 15,"eur", "itemName","someId");
+        Order order4 = new Order(10004, 12, "eur", "itemName5", "someId");
+        Order order5 = new Order(10005, 2, "eur", "itemName", "someId");
+        Order order6 = new Order(10006, 120, "eur", "itemName", "someId");
+        Order order7 = new Order(10007, 10, "eur", "itemName", "someId");
+        Order order8 = new Order(10008, 303, "eur", "itemName", "someId");
+        Order order9 = new Order(10009, 15, "eur", "itemName", "someId");
 
         list2.add(order4);
         list2.add(order5);
@@ -61,7 +61,7 @@ public class ArrayListTest {
         System.out.println(list2.contains(order5));
 
         //Object[] toArray
-        Order[]orders = new Order[list.size()];
+        Order[] orders = new Order[list.size()];
         list.toArray(orders);
         System.out.println(Arrays.deepToString(orders));
         System.out.println(list);
