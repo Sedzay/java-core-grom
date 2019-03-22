@@ -37,6 +37,10 @@ public class Controller {
 
 
     public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
+        if(storageTo.getFiles() == null || storageFrom.getFiles() == null) {
+            System.out.println("Storage has not place for files");
+            return;
+        }
 
         checkTransferAllFiles(storageFrom, storageTo);
 
@@ -51,7 +55,6 @@ public class Controller {
         }
 
         System.out.println("Transfer all files in storage with id " + storageTo.getId() + " is done!");
-
     }
 
     public void transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
