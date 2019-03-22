@@ -15,9 +15,8 @@ public class UserRepository {
     }
 
     public User findBiId(long id){
+
         User userById = null;
-        User[] newUsers = new User[users.size()];
-        users.toArray(newUsers);
         for (User us : users) {
             if (us != null && us.getId() == id) {
                 userById = us;
@@ -28,8 +27,7 @@ public class UserRepository {
     }
 
     public User save(User user) {
-        if (user == null)
-            return null;
+
         if(findBiId(user.getId()) !=null)
             return null;
         users.add(user);
@@ -37,16 +35,14 @@ public class UserRepository {
     }
 
     public User update(User user) {
-        if (user == null)
-            return null;
-        int index;
-        if(findBiId(user.getId()) == null) {
-            return null;
-        }else {
-            index = users.indexOf(findBiId(user.getId()));
+
+        int index = users.indexOf(findBiId(user.getId()));
+
+        if (index >= 0) {
+            users.set(index, user);
+            return user;
         }
-        users.set(index, user);
-        return user;
+        return null;
     }
 
     public void delete(long id) {
