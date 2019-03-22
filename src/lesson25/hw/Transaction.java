@@ -2,22 +2,13 @@ package lesson25.hw;
 
 import java.util.Objects;
 
-public class Transaction extends IdEntity{
+public class Transaction {
     private long id;
     private int amount;
 
     public Transaction(long id, int amount) {
         this.id = id;
         this.amount = amount;
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    public int getAmount() {
-        return amount;
     }
 
     @Override

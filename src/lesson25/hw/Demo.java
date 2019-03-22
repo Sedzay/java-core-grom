@@ -67,7 +67,5 @@ public class Demo {
             System.out.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(transactionGeneralDAO.getAll()));
-
-
     }
 }
