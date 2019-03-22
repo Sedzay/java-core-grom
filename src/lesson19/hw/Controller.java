@@ -6,7 +6,7 @@ public class Controller {
 
     public File put(Storage storage, File file) throws Exception {
         if (storage.getFiles() == null)
-            throw new Exception("storage has not place for files");
+            throw new Exception("File with id " + file.getId() + " can't be added, storage has not place for files");
 
         checkAddFile(storage, file);
         //add file
@@ -24,7 +24,7 @@ public class Controller {
 
     public void delete(Storage storage, File file) throws Exception {
         if (storage.getFiles() == null)
-            throw new Exception("storage has not place for files");
+            throw new Exception("File with id " + file.getId() + " can't be deleted, storage has not place for files");
 
         checkDeleteFile(storage, file);
 
