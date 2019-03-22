@@ -6,27 +6,24 @@ public class Controller {
 
     public File put(Storage storage, File file) throws Exception {
         if (storage.getFiles() == null)
-            return null;
-//            throw new Exception("File with id " + file.getId() + " can't be added, storage has not place for files");
+            throw new Exception("File with id " + file.getId() + " can't be added, storage has not place for files");
 
         checkAddFile(storage, file);
         //add file
-        int i;
-        for (i = 0; i < storage.getFiles().length; i++) {
+        for (int i = 0; i < storage.getFiles().length; i++) {
             if (storage.getFiles()[i] == null) {
                 storage.getFiles()[i] = file;
-                break;
+                System.out.println("File with id " + file.getId() + " add successfully in storage with id " + storage.getId());
+                return storage.getFiles()[i];
             }
         }
-        System.out.println("File with id " + file.getId() + " add successfully in storage with id " + storage.getId());
-        return storage.getFiles()[i];
+        return null;
     }
 
 
     public void delete(Storage storage, File file) throws Exception {
         if (storage.getFiles() == null)
-            return;
-//            throw new Exception("File with id " + file.getId() + " can't be deleted, storage has not place for files");
+            throw new Exception("File with id " + file.getId() + " can't be deleted, storage has not place for files");
 
         checkDeleteFile(storage, file);
 
@@ -40,8 +37,6 @@ public class Controller {
 
 
     public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
-        if (storageFrom.getFiles() == null || storageTo.getFiles() == null)
-            return;
 
         checkTransferAllFiles(storageFrom, storageTo);
 
@@ -94,14 +89,14 @@ public class Controller {
 
         int countFilesToTransfer = 0;
         for (File file : storageFrom.getFiles()) {
-            if(file != null) {
+            if (file != null) {
                 formatIsCorrect(storageTo, file);
                 sameFile(storageTo, file);
                 countFilesToTransfer++;
             }
         }
 
-        if(countFilesToTransfer == 0)
+        if (countFilesToTransfer == 0)
             throw new Exception("In storage with id " + storageFrom.getId() + " has not files for transfer");
 
         //проверить другое хранилище на наличие пустых мест
