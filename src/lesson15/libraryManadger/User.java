@@ -12,7 +12,9 @@ public class User {
     private String city;
     private int contact;
 
-    private boolean authorization = false;
+    private Book[] books;
+
+    private boolean authorisation = false;
 
     public User(long id, String name, String password, UserType userType, String email, String address, String city, int contact) {
         this.id = id;
@@ -23,6 +25,7 @@ public class User {
         this.address = address;
         this.city = city;
         this.contact = contact;
+        this.books = userType == UserType.VISITOR ? new Book[5] : null;
     }
 
     public long getId() {
@@ -41,8 +44,8 @@ public class User {
         return userType;
     }
 
-    public boolean isAuthorization() {
-        return authorization;
+    public boolean isAuthorisation() {
+        return authorisation;
     }
 
     public String getEmail() {
@@ -65,8 +68,20 @@ public class User {
         this.id = id;
     }
 
-    public void setAuthorization(boolean authorization) {
-        this.authorization = authorization;
+    public void setAuthorisation(boolean authorisation) {
+        this.authorisation = authorisation;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setContact(int contact) {
+        this.contact = contact;
+    }
+
+    public Book[] getBooks() {
+        return books;
     }
 
     @Override
@@ -80,7 +95,7 @@ public class User {
                 ", address='" + address + '\'' +
                 ", city='" + city + '\'' +
                 ", contact=" + contact +
-                ", authorization=" + authorization +
+                ", authorisation=" + authorisation +
                 '}';
     }
 
@@ -89,13 +104,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id &&
-                name.equals(user.name) &&
+        return name.equals(user.name) &&
                 userType == user.userType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, userType);
+        return Objects.hash(name, userType);
     }
 }

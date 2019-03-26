@@ -10,21 +10,17 @@ public class Book {
     private String name;
     private String author;
     private String publisher;
-    private int quantity;
-    private int issued;
     private Date addededDate;
 
-    private User[] visitors;
-    private Date[] issuedDate;
+    private User visitor;
+    private Date issuedDate;
 
-    public Book(long id, String collno, String name, String author, String publisher, int quantity, int issued, Date addededDate) {
+    public Book(long id, String collno, String name, String author, String publisher, Date addededDate) {
         this.id = id;
         this.collno = collno;
         this.name = name;
         this.author = author;
         this.publisher = publisher;
-        this.quantity = quantity;
-        this.issued = issued;
         this.addededDate = addededDate;
     }
 
@@ -48,14 +44,6 @@ public class Book {
         return publisher;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public int getIssued() {
-        return issued;
-    }
-
     public Date getAddededDate() {
         return addededDate;
     }
@@ -64,31 +52,23 @@ public class Book {
         this.id = id;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setIssued(int issued) {
-        this.issued = issued;
-    }
-
     public void setAddededDate(Date addededDate) {
         this.addededDate = addededDate;
     }
 
-    public User[] getVisitors() {
-        return visitors;
+    public User getVisitors() {
+        return visitor;
     }
 
-    public void setVisitors(User[] visitors) {
-        this.visitors = visitors;
+    public void setVisitors(User visitors) {
+        this.visitor = visitors;
     }
 
-    public Date[] getIssuedDate() {
+    public Date getIssuedDate() {
         return issuedDate;
     }
 
-    public void setIssuedDate(Date[] issuedDate) {
+    public void setIssuedDate(Date issuedDate) {
         this.issuedDate = issuedDate;
     }
 
@@ -111,16 +91,11 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "id=" + id +
-                ", collno='" + collno + '\'' +
+                "collno='" + collno + '\'' +
                 ", name='" + name + '\'' +
                 ", author='" + author + '\'' +
                 ", publisher='" + publisher + '\'' +
-                ", quantity=" + quantity +
-                ", issued=" + issued +
                 ", addededDate=" + addededDate +
-                ", visitors=" + Arrays.toString(visitors) +
-                ", issuedDate=" + Arrays.toString(issuedDate) +
                 '}';
     }
 }
