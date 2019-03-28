@@ -7,9 +7,9 @@ import java.util.Date;
 public class DemoComparator {
     public static void main(String[] args) {
 
-        Capability capability1 = new Capability(1001, "test", "rrrr2", true, new Date());
-        Capability capability2 = new Capability(1005, "test", "rrrr4", false, new Date());
-        Capability capability3 = new Capability(900, "test", "rrrr", true, new Date());
+        Capability capability1 = new Capability(1001, null, "rrrr", true, new Date());
+        Capability capability2 = new Capability(1005, "test", "rrrr2", false, new Date());
+        Capability capability3 = new Capability(800, null, "rrrr", true, new Date());
         Capability capability4 = new Capability(900, "test", "rrrr", false, new Date());
 
 

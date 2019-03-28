@@ -7,11 +7,14 @@ public class FullComparator implements Comparator<Capability> {
     @Override
     public int compare(Capability o1, Capability o2) {
 
-        if (!o1.getChannelName().equals(o2.getChannelName()))
-            return o1.getChannelName().compareTo(o2.getChannelName());
-        else if (!o1.getFingerprint().equals(o2.getFingerprint()))
-            return o1.getFingerprint().compareTo(o2.getFingerprint());
-        else
-            return o1.getDateCreated().compareTo(o2.getDateCreated());
+        int resultCompare1 = checkString(o1.getChannelName(), o2.getChannelName());
+        int resultCompare2 = checkString(o1.getFingerprint(), o2.getFingerprint());
+
+        return resultCompare1 != 0 ? resultCompare1 : (resultCompare2 != 0 ? resultCompare2 : o1.getDateCreated().compareTo(o2.getDateCreated()));
+    }
+
+    private int checkString(String str1, String str2) {
+
+        return str1 == null ? 1 : (str2 == null ? -1 : str1.compareTo(str2));
     }
 }
