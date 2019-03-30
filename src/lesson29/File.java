@@ -2,7 +2,7 @@ package lesson29;
 
 import java.util.Objects;
 
-public class File {
+public class File implements Comparable<File>{
     private String fileName;
     private long sizeInBytes;
 
@@ -13,6 +13,16 @@ public class File {
 
     public String getFileName() {
         return fileName;
+    }
+
+    public long getSizeInBytes() {
+        return sizeInBytes;
+    }
+
+    @Override
+    public int compareTo(File file) {
+
+        return file.getSizeInBytes() < this.sizeInBytes ? -1 : 1;
     }
 
     @Override
@@ -35,4 +45,6 @@ public class File {
                 ", sizeInBytes=" + sizeInBytes +
                 '}';
     }
+
+
 }
