@@ -8,24 +8,14 @@ public class WriteFile {
 
     public void writeToFileFromConsole(String path) {
 
-        FileReader fileReader = null;
+        if (!checkFile(path))
+            return;
 
         InputStreamReader inputStreamReader = null;
         BufferedReader bufferedReader = null;
 
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
-
-        try {
-            //проверить наличие файла по заданному пути
-            fileReader = new FileReader(path);
-        }catch (FileNotFoundException e) {
-            System.err.println("File with path " + path + " not found");
-            return;
-        }finally {
-            IOUtils.closeQuietly(fileReader);
-        }
-
 
         try {
 
@@ -59,5 +49,20 @@ public class WriteFile {
             IOUtils.closeQuietly(bufferedWriter);
             IOUtils.closeQuietly(fileWriter);
         }
+    }
+
+    private boolean checkFile(String path) {
+        FileReader fileReader = null;
+
+        try {
+            //проверить наличие файла по заданному пути
+            fileReader = new FileReader(path);
+        }catch (FileNotFoundException e) {
+            System.err.println("File with path " + path + " not found");
+            return false;
+        }finally {
+            IOUtils.closeQuietly(fileReader);
+        }
+        return true;
     }
 }

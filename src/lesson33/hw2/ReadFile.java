@@ -6,8 +6,8 @@ import java.io.*;
 
 public class ReadFile {
     public void readFileByConsolePath() {
-        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("Please, enter file path to read:");
         String path = "";
@@ -19,22 +19,15 @@ public class ReadFile {
             return;
         } finally {
             IOUtils.closeQuietly(bufferedReader);
-            IOUtils.closeQuietly(inputStreamReader);
         }
-
         readFile(path);
     }
 
 
     private void readFile(String path) {
-        FileReader reader;
-
-        try {
-            reader = new FileReader(path);
-        } catch (FileNotFoundException e) {
-            System.err.println("File with path " + path + " not found");
+        FileReader reader = checkFile(path);
+        if (reader == null)
             return;
-        }
 
         BufferedReader br = new BufferedReader(reader);
 
@@ -49,5 +42,17 @@ public class ReadFile {
             IOUtils.closeQuietly(reader);
             IOUtils.closeQuietly(br);
         }
+    }
+
+    private FileReader checkFile(String path) {
+        FileReader fileReader = null;
+
+        try {
+            fileReader = new FileReader(path);
+        }catch (FileNotFoundException e) {
+            System.err.println("File with path " + path + " not found");
+            return null;
+        }
+        return fileReader;
     }
 }
