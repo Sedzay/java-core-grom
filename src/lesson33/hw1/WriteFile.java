@@ -6,10 +6,9 @@ import java.io.*;
 
 public class WriteFile {
 
-    public void writeToFileFromConsole(String path) {
+    public static void writeToFileFromConsole(String path) throws Exception {
 
-        if (!checkFile(path))
-            return;
+        validate(path);
 
         InputStreamReader inputStreamReader = null;
         BufferedReader bufferedReader = null;
@@ -32,7 +31,6 @@ public class WriteFile {
 
             while (!text.equals("wr")) {
                 text = bufferedReader.readLine();
-
                 //записать данные в файл
                 bufferedWriter.append(text);
                 bufferedWriter.append("\r\n"); //\r - перевод строки для блокнота виндовс
@@ -42,7 +40,6 @@ public class WriteFile {
             System.err.println("Can't write to file with path " + path);
             return;
         } finally {
-
             IOUtils.closeQuietly(bufferedReader);
             IOUtils.closeQuietly(inputStreamReader);
 
@@ -51,18 +48,13 @@ public class WriteFile {
         }
     }
 
-    private boolean checkFile(String path) {
-        FileReader fileReader = null;
+    private static void validate(String path) throws Exception {
+        File file = new File(path);
 
-        try {
-            //проверить наличие файла по заданному пути
-            fileReader = new FileReader(path);
-        }catch (FileNotFoundException e) {
-            System.err.println("File with path " + path + " not found");
-            return false;
-        }finally {
-            IOUtils.closeQuietly(fileReader);
-        }
-        return true;
+        if (!file.exists())
+            throw new FileNotFoundException("File with path " + path + " not found");
+
+        if (!file.canWrite())
+            throw new Exception("Can't write to file with path " + path);
     }
 }
