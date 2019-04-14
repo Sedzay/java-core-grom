@@ -1,27 +1,30 @@
 package lesson30.hw;
 
-public class ProjectDAO extends AbstractDAO {
+import java.util.HashSet;
 
-    @Override
-    public IdEntity add(IdEntity idEntity) {
-        return super.add(idEntity);
+public class ProjectDAO {
+    private HashSet<Project> collection = new HashSet<>();
+
+    public HashSet<Project> getCollection() {
+        return collection;
     }
 
-    @Override
-    public void remove(long id) {
-        super.remove(id);
-    }
-
-    @Override
-    public IdEntity update(IdEntity idEntity) {
-        return super.update(idEntity);
-    }
-
-
-    @Override
     public String toString() {
         return "ProjectDAO{" +
-                "projects=" + super.getCollection() +
+                "projects=" + collection +
                 '}';
     }
+
+    HashSet<Project> projectsByCustomer(Customer customer) {
+
+        HashSet<Project> allProjectByCustomer = new HashSet<>();
+
+        for (Project project : collection) {
+            if (project != null && project.getCustomer().equals(customer)) {
+                allProjectByCustomer.add(project);
+            }
+        }
+        return allProjectByCustomer;
+    }
+
 }

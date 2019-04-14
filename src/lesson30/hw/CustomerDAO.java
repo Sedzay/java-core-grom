@@ -1,26 +1,18 @@
 package lesson30.hw;
 
-public class CustomerDAO extends AbstractDAO {
+import java.util.HashSet;
 
-    @Override
-    public IdEntity add(IdEntity idEntity) {
-        return super.add(idEntity);
+public class CustomerDAO {
+
+    private HashSet<Customer> collection = new HashSet<>();
+
+    public HashSet<Customer> getCollection() {
+        return collection;
     }
 
-    @Override
-    public void remove(long id) {
-        super.remove(id);
-    }
-
-    @Override
-    public IdEntity update(IdEntity idEntity) {
-        return super.update(idEntity);
-    }
-
-    @Override
     public String toString() {
         return "CustomerDAO{" +
-                "customers=" + super.getCollection() +
+                "customers=" + collection +
                 '}';
     }
 }

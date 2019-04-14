@@ -2,9 +2,8 @@ package lesson30.hw;
 
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
-public class Department extends IdEntity {
+public class Department {
 
     private long id;
     private DepartmentType type;
@@ -15,7 +14,6 @@ public class Department extends IdEntity {
         this.type = type;
     }
 
-    @Override
     public long getId() {
         return id;
     }

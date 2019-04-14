@@ -2,7 +2,7 @@ package lesson30.hw;
 
 import java.util.*;
 
-public class Employee extends IdEntity{
+public class Employee {
 
     private long id;
     private String firstName;

@@ -2,7 +2,7 @@ package lesson30.hw;
 
 import java.util.Objects;
 
-public class Project extends IdEntity {
+public class Project {
 
     private long id;
     private String name;

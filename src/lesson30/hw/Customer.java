@@ -3,7 +3,7 @@ package lesson30.hw;
 import java.util.Objects;
 import java.util.Random;
 
-public class Customer extends IdEntity {
+public class Customer {
 
     private long id;
     private String name;
@@ -20,7 +20,7 @@ public class Customer extends IdEntity {
         this.monthlyPay = monthlyPay;
     }
 
-    @Override
+
     public long getId() {
         return id;
     }
