@@ -41,6 +41,7 @@ public class ReadWriteFile {
            // Thread.sleep(6000);
 
             writer = new FileWriter(path, true);
+//          writer = new FileWriter(new File(path), true);
             bufferedWriter = new BufferedWriter(writer);
 
             // \r\n - так работает перевод каретки в блокните виндовс
