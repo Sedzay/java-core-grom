@@ -5,7 +5,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 
 public class ReadFile {
-    public void readFileByConsolePath() {
+    public static void readFileByConsolePath() throws Exception{
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -15,7 +15,7 @@ public class ReadFile {
         try {
             path = bufferedReader.readLine();
         } catch (IOException e) {
-            System.out.println("Can't read file by path " + path);
+            System.err.println("Can't read file by path " + path);
             return;
         } finally {
             IOUtils.closeQuietly(bufferedReader);
@@ -24,12 +24,9 @@ public class ReadFile {
     }
 
 
-    private void readFile(String path) {
-        FileReader reader = checkFile(path);
-        if (reader == null)
-            return;
-
-        BufferedReader br = new BufferedReader(reader);
+    private static void readFile(String path) throws Exception {
+        validate(path);
+        BufferedReader br = new BufferedReader(new FileReader(path));
 
         String line;
         try {
@@ -39,20 +36,17 @@ public class ReadFile {
         } catch (IOException e) {
             System.err.println("Can't read file by path " + path);
         } finally {
-            IOUtils.closeQuietly(reader);
             IOUtils.closeQuietly(br);
         }
     }
 
-    private FileReader checkFile(String path) {
-        FileReader fileReader = null;
+    private static void validate(String path) throws Exception{
+        File file = new File(path);
 
-        try {
-            fileReader = new FileReader(path);
-        }catch (FileNotFoundException e) {
-            System.err.println("File with path " + path + " not found");
-            return null;
-        }
-        return fileReader;
+        if (!file.exists())
+            throw new FileNotFoundException("File with path " + path + " not found");
+
+        if (!file.canRead())
+            throw new Exception("Can't read file by path " + path);
     }
 }
