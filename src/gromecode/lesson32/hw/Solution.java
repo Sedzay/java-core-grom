@@ -10,8 +10,7 @@ public class Solution {
         int res = 0;
 
         while (countAttempts != 0 && res == 0){
-            InputStreamReader inputStreamReader = new InputStreamReader(System.in);
-            BufferedReader br = new BufferedReader(inputStreamReader);
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
             System.out.println("Please enter numbers");
 
