@@ -10,41 +10,35 @@ public class WriteFile {
 
         validate(path);
 
-        InputStreamReader inputStreamReader = null;
         BufferedReader bufferedReader = null;
-
-        FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
 
         try {
 
-            inputStreamReader = new InputStreamReader(System.in);
-            bufferedReader = new BufferedReader(inputStreamReader);
-
-            fileWriter = new FileWriter(path, true);
-            bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+            bufferedWriter = new BufferedWriter(new FileWriter(path, true));
 
             //считать ввод данных в консоли
             System.out.println("Enter file content to write in the file:");
 
             String text = "";
+            StringBuffer stringBuffer = new StringBuffer();
 
-            while (!text.equals("wr")) {
+            while (true) {
                 text = bufferedReader.readLine();
-                //записать данные в файл
-                bufferedWriter.append(text);
-                bufferedWriter.append("\r\n"); //\r - перевод строки для блокнота виндовс
+                if (text.equals("wr")) {
+                    bufferedWriter.append(stringBuffer);
+                    return;
+                }
+                stringBuffer.append("\r\n");
+                stringBuffer.append(text);
             }
 
         } catch (IOException e) {
             System.err.println("Can't write to file with path " + path);
-            return;
         } finally {
             IOUtils.closeQuietly(bufferedReader);
-            IOUtils.closeQuietly(inputStreamReader);
-
             IOUtils.closeQuietly(bufferedWriter);
-            IOUtils.closeQuietly(fileWriter);
         }
     }
 
