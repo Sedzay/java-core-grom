@@ -7,10 +7,9 @@ public class Solution {
 
     public void readNumbers() throws Exception {
         int countAttempts = 3;
-        int res;
+        int res = 0;
 
-        do {
-            res = 0;
+        while (countAttempts != 0 && res == 0){
             InputStreamReader inputStreamReader = new InputStreamReader(System.in);
             BufferedReader br = new BufferedReader(inputStreamReader);
 
@@ -20,42 +19,38 @@ public class Solution {
             String[] numbers = text.split(" ");
 
             for (String st : numbers) {
-                countAttempts--;
-                if (numbers.length != 10 || stringToNumber(st) == 999) {
-                    messageAboveMistake(countAttempts);
-                    res = 999;
+                if (!validator(numbers)) {
+                    countAttempts--;
+                    if (countAttempts == 0) {
+                        System.out.println("Your numbers are wrong. Number of attempts exceeded");
+                        return;
+                    }
+                    System.out.println("Your numbers are wrong. You have " + countAttempts + " attempts to try again");
+                    res = 0;
                     break;
                 }
                 res += stringToNumber(st);
             }
-            if (res != 999) {
-                System.out.println("Your result is " + res);
-                return;
-            }
-        } while (countAttempts != 0);
+        }
+        System.out.println("Your result is " + res);
+    }
+
+    private boolean validator(String[] stringNumbers) {
+        if (stringNumbers.length != 10)
+            return false;
+        for (String num : stringNumbers) {
+            if (stringToNumber(num) > 100)
+                return false;
+        }
+        return true;
     }
 
     private int stringToNumber(String string) {
-        char[] chars = string.toCharArray();
-        for (char ch : chars) {
+        for (char ch : string.toCharArray()) {
             if (!Character.isDigit(ch)) {
-                return 999;
+                return 101;
             }
         }
-        int number = Integer.parseInt(string);
-        if (0 > number || number > 99) {
-            return 999;
-        }
-        return number;
+        return Integer.parseInt(string);
     }
-
-    private void messageAboveMistake(int countAttempts) {
-        if (countAttempts != 0) {
-            System.out.println("Your numbers are wrong. You have " + countAttempts + " attempts to try again");
-            return;
-        }
-        System.out.println("Your numbers are wrong. Number of attempts exceeded");
-    }
-
-
 }
