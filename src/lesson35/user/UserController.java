@@ -4,10 +4,8 @@ public class UserController {
 
     private UserService userService = new UserService();
 
-    public User registerUser(User user) throws Exception{
-
-        userService.registerUser(user);
-
-        return null;
+    public User registerUser(User user) throws Exception {
+        return userService.registerUser(user);
     }
+
 }

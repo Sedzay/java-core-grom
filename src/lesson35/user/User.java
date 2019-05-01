@@ -1,13 +1,14 @@
 package lesson35.user;
 
-public class User {
+import lesson35.ReceiveId;
+
+public class User implements ReceiveId {
     private long id;
     private String userName;
     private String password;
     private String country;
     private UserType userType;
 
-    private boolean isLogin = false;
 
     public User(long id, String userName, String password, String country, UserType userType) {
         this.id = id;
@@ -17,6 +18,7 @@ public class User {
         this.userType = userType;
     }
 
+    @Override
     public long getId() {
         return id;
     }
@@ -37,9 +39,6 @@ public class User {
         return userType;
     }
 
-    public boolean isLogin() {
-        return isLogin;
-    }
 
     public void setId(long id) {
         this.id = id;
@@ -61,9 +60,6 @@ public class User {
         this.userType = userType;
     }
 
-    public void setLogin(boolean login) {
-        this.isLogin = login;
-    }
 
     @Override
     public String toString() {
