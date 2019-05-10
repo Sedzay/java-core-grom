@@ -13,8 +13,8 @@ public class UserRepository extends AbstractRepository {
     //регистрация юзера
 
     User registerUser(User user) throws Exception {
-        user.setId(addId(mappingStringsToObjects(readFile())));
-        addLine(user);
+        user.setId(addId(getList()));
+        save(user);
         System.out.println("New user " + user.getUserName() + " added successfully!");
         return user;
     }

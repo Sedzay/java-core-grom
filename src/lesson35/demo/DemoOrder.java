@@ -20,7 +20,7 @@ public class DemoOrder {
         //orderController.bookRoom(107, 10002, 101);
 
         //бронирование комнаты возможно
-        //orderController.bookRoom(109, 10003, 104);
+        orderController.bookRoom(109, 10003, 104);
 
         //снять бронь, нет такого юзера
         //orderController.cancelReservation(105, 1001);
@@ -29,6 +29,7 @@ public class DemoOrder {
         //orderController.cancelReservation(111, 10002);
 
         //снять бронь
-        orderController.cancelReservation(105, 10002);
+        //orderController.cancelReservation(105, 10002);
+
     }
 }

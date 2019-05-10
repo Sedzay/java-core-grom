@@ -18,7 +18,7 @@ public class UserService {
 
     private void checkReiterationUser(User user) throws Exception {
         userRepository.setPath(userRepository.getPath());
-        for (User userFromDb : (ArrayList<User>) userRepository.mappingStringsToObjects(userRepository.readFile())) {
+        for (User userFromDb : (ArrayList<User>) userRepository.getList()) {
             if (userFromDb.getUserName().equals(user.getUserName()))
                 throw new BadRequestException("User with name " + user.getUserName() + " already exist. Method " + Thread.currentThread().getStackTrace()[2].getMethodName());
         }

@@ -61,6 +61,10 @@ public class Room implements ReceiveId {
         this.id = id;
     }
 
+    public void setDateAvailableFrom(Date dateAvailableFrom) {
+        this.dateAvailableFrom = dateAvailableFrom;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

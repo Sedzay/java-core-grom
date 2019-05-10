@@ -51,7 +51,7 @@ public class HotelService {
     }
 
     private void checkReiterationHotel(Hotel hotel) throws Exception{
-        for (Hotel hotelFromDb : (ArrayList<Hotel>) hotelRepository.mappingStringsToObjects(hotelRepository.readFile())) {
+        for (Hotel hotelFromDb : (ArrayList<Hotel>) hotelRepository.getList()) {
             if (hotelFromDb.equals(hotel))
                 throw new BadRequestException("Hotel with name " + hotel.getName() + " in city " + hotel.getCity() + " already exist. Method " + Thread.currentThread().getStackTrace()[2].getMethodName());
         }

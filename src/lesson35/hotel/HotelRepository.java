@@ -14,7 +14,7 @@ public class HotelRepository extends AbstractRepository {
     }
 
     Hotel findHotelByName(String name) throws Exception {
-        ArrayList<Hotel> hotels = mappingStringsToObjects(readFile());
+        ArrayList<Hotel> hotels = getList();
         for (Hotel hotel : hotels) {
             if (hotel != null && hotel.getName().equals(name))
                 return hotel;
@@ -23,7 +23,7 @@ public class HotelRepository extends AbstractRepository {
     }
 
     Hotel findHotelByCity(String city) throws Exception {
-        ArrayList<Hotel> hotels = mappingStringsToObjects(readFile());
+        ArrayList<Hotel> hotels = getList();
         for (Hotel hotel : hotels) {
             if (hotel.getCity().equals(city))
                 return hotel;
@@ -42,12 +42,12 @@ public class HotelRepository extends AbstractRepository {
     }
 
     Hotel addHotel(Hotel hotel) throws Exception {
-        hotel.setId(addId(mappingStringsToObjects(readFile())));
-        return (Hotel) addLine(hotel);
+        hotel.setId(addId(getList()));
+        return (Hotel) save(hotel);
     }
 
     void deleteHotel(long hotelId) throws Exception {
-        ArrayList<Hotel> hotels = mappingStringsToObjects(readFile());
+        ArrayList<Hotel> hotels = getList();
         int index = 0;
         for (Hotel hotel : hotels) {
             if (hotel.getId() == hotelId) {

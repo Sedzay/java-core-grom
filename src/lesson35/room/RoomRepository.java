@@ -21,12 +21,12 @@ public class RoomRepository extends AbstractRepository {
     }
 
     Room addRoom(Room room) throws Exception {
-        room.setId(addId(mappingStringsToObjects(readFile())));
-        return (Room) addLine(room);
+        room.setId(addId(getList()));
+        return (Room) save(room);
     }
 
     void deleteRoom(long RoomId) throws Exception {
-        ArrayList<Room> rooms = mappingStringsToObjects(readFile());
+        ArrayList<Room> rooms = getList();
         int index = 0;
         for (Room room : rooms) {
             if (room.getId() == RoomId) {
@@ -49,7 +49,7 @@ public class RoomRepository extends AbstractRepository {
 
         //Для реализации выбран второй способ
 
-        ArrayList<Room> rooms = mappingStringsToObjects(readFile());
+        ArrayList<Room> rooms = getList();
         ArrayList<Room> needRemoveRooms = new ArrayList<>();
 
         //Отбираются только те данные, которые НЕ соответствуют параметрам отбора
@@ -98,7 +98,7 @@ public class RoomRepository extends AbstractRepository {
     private Hotel findHotelById(long id) throws Exception {
         HotelRepository hotelRepository = new HotelRepository();
         hotelRepository.setPath(pathHotelDb);
-        ArrayList<Hotel> hotels = hotelRepository.mappingStringsToObjects(hotelRepository.readFile());
+        ArrayList<Hotel> hotels = hotelRepository.getList();
         for (Hotel hotel : hotels) {
             if (hotel.getId() == id)
                 return hotel;

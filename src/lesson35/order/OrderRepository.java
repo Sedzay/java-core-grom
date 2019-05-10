@@ -36,17 +36,20 @@ public class OrderRepository extends AbstractRepository {
         return roomRepository;
     }
 
-    void bookRoom(long roomId, long userId, long hotelId) throws Exception{
-        User user = (User) findObjectById(userId, new UserRepository());
-        Room room = (Room) findObjectById(roomId, roomRepository);
+    void bookRoom(Room room, User user) throws Exception{
 
-        Order order = new Order(addId(mappingStringsToObjects(readFile())), user, room, new Date(), new Date(), 0);
-        addLine(order);
+        Date bookedUp = new Date();
+        Order order = new Order(addId(getList()), user, room, new Date(), bookedUp, 0);
+        save(order);
+
+        //изменить дату свободной комнаты
+        updateRoomDateAviableTo(room, bookedUp);
+
         System.out.println("Room was booking successfully!");
     }
 
     void cancelReservation(long roomId, long userId) throws Exception{
-        ArrayList<Order> orders = mappingStringsToObjects(readFile());
+        ArrayList<Order> orders = getList();
         if (orders.isEmpty())
             throw new InternalServerException("Orders Data base is empty. Method " + Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -73,6 +76,17 @@ public class OrderRepository extends AbstractRepository {
                 dateFormat.parse(attributes[3]),
                 dateFormat.parse(attributes[4]),
                 Double.parseDouble(attributes[5]));
+    }
+
+    private void updateRoomDateAviableTo(Room room, Date bookedUp) throws Exception{
+        ArrayList<Room> rooms = roomRepository.getList();
+        for (Room r : rooms) {
+            if (r.getId() == room.getId()) {
+                r.setDateAvailableFrom(new Date(bookedUp.getTime() + (1000 * 60 * 60 * 24)));
+                room = r;
+            }
+        }
+        roomRepository.writeListObjectsToDb(rooms);
     }
 
 }
